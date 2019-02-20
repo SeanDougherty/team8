@@ -9,6 +9,12 @@
 import csv #for reading csvs
 import sys #for reading command line arguments
 
+#Cmd Line Args checking
+if not len(sys.argv) == 2:
+	print("Correct syntax is: \"py(thon3) main.py filename\"")
+	print("Terminating...")
+	sys.exit()
+
 #Instance Variables
 packetBuffer = [] #this is the list that packet numbers go in
 timeStamp = [] # idk if we need this but if we do we have it!
