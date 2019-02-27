@@ -16,8 +16,9 @@ if not len(sys.argv) == 5:
 	sys.exit()
 
 #Instance Variables
-packetBuffer = [] #this is the list that packet numbers go in
-timeStamp = [] # idk if we need this but if we do we have it!
+csvData = [] #this is the list of csv tuples
+#packetBuffer = [] #this is the list that packet numbers go in
+#timeStamp = [] # idk if we need this but if we do we have it!
 day = "Undefined"
 
 #Command Line Arg Instantiation
@@ -36,12 +37,13 @@ with open(filename, "r") as f:
 	#I didn't like changing the day every loop, that seems redundant and wasteful.
 	tempRow = next(reader)
 	day = tempRow[0].strip().partition(' ')[0]
-	packetBuffer.append(tempRow[1])
-	timeStamp.append(tempRow[0].strip().partition(' ')[2])
+	tempTuple = (tempRow[1],tempRow[0].strip().partition(' ')[2])
+	csvData.append(tempTuple)
+
 	for row in reader:
 		if row[0][0].isdigit():
-			packetBuffer.append(row[1])
-			timeStamp.append(row[0].strip().partition(' ')[2])
+			tempTuple = (row[1],row[0].strip().partition(' ')[2])
+			csvData.append(tempTuple)
 
 	f.close()
 
@@ -49,5 +51,4 @@ with open(filename, "r") as f:
 
 print("Program output for filename: '" + filename + "'.")
 print ("Date: " + day + ".")
-print(timeStamp)
-print(packetBuffer)
+print(csvData)
