@@ -6,3 +6,7 @@ class PacketLoad(list):
         self.PacketsLeft = count(list)
     def feed(self):
         self.PacketsLeft - 1
+	def getStartTime(self):
+		print (self.StartTime)
+	def getPacketsLeft(self):
+		print (self.getPacketsLeft)
