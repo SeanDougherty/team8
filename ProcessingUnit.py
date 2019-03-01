@@ -7,6 +7,7 @@ class ProcessingUnit(object):
         self.latency = []
         self.throughput = []
         self.maxBufferSize = desired_max_buffer_size
+        self.actualMaxBufferSize = 0
         self.currentBufferSize = 0
         self.processingRate = processing_rate
 
@@ -28,7 +29,8 @@ class ProcessingUnit(object):
             self.currentBufferSize += packetLoad.PacketsLeft
         return self.currentBufferSize
 
-    def add_to_buffer(self, packet_load):
+    def add_to_buffer(self, packet_load, current_time):
+        #packet_load.StartTime = current_time
         self.packetBuffer.append(packet_load)
 
     # Churns through packetBuffer for one simulated second
