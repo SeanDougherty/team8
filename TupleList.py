@@ -5,7 +5,7 @@ import csv
 
 class TupleList:
     def __init__(self):
-        self.tuple_list = []
+        self.tuple_list = [] # Each index in this tuple list represents 1 minute of packets to process
         self.day = "Undefined"
     
     def create(self,filename):
@@ -25,6 +25,16 @@ class TupleList:
                             self.tuple_list.append(tempTuple)
 
             f.close()
+
+    def convert_tuple_list_to_seconds(self):
+        seconds_tuple_list = [] # Each index in this tuple list represents 1 second of packets to process
+        minute_counter = 0
+        for tuple in self.tuple_list:
+            for iterator in range(60):
+                tuple[1] = minute_counter+iterator
+                seconds_tuple_list.append(tuple)
+            minute_counter += 60
+        return seconds_tuple_list
 
     def print_tuple_list(self):
         #print("Program output for filename: '" + filename + "'.") #filename is not stored, unless we want it to be.

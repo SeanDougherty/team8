@@ -39,12 +39,12 @@ clock.start_stop() # Dylan
 # Build out our list of tuples ( time, packets_left ) - David
 csvArray = TupleList()
 csvArray.create(filename)
-# # Create a while loop, where each loop simulates 1 minute of operation
+packetLoadsToProcess = csvArray.convert_tuple_list_to_seconds()
+# # Create a while loop, where each loop simulates 1 second of operation
 
 while (current_time < desired_run_time):
-	processingUnit.add_to_buffer(csvArray.tuple_list[current_time][0], csvArray.tuple_list[current_time][1])
-	for _ in range(60): #here's the simulation of churning data for 60 seconds!
-		processingUnit.process_data(current_time * 60) #@Sean this is probably wrong maybe you want to fix this
+	processingUnit.add_to_buffer(packetLoadsToProcess[current_time][0], packetLoadsToProcess[current_time][1])
+	processingUnit.process_data(current_time) # Process data for 1 second
 	current_time += 1
 
 clock.start_stop()
