@@ -31,8 +31,8 @@ class TupleList:
         minute_counter = 0
         for tuple in self.tuple_list:
             for iterator in range(60):
-                tuple[1] = minute_counter+iterator
-                seconds_tuple_list.append(tuple)
+                tempTuple = (int(tuple[0]),int(minute_counter+iterator))
+                seconds_tuple_list.append(tempTuple)
             minute_counter += 60
         return seconds_tuple_list
 
