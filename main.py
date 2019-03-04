@@ -16,7 +16,7 @@ from StatCalculator import StatCalculator
 
 # Cmd Line Args checking
 if not len(sys.argv) == 5:
-	print("Correct syntax is: \"py(thon3) main.py filename processingRate(nanoseconds) runTime(nanoseconds) wantedBufferSize desiredRunTime(seconds)\"")
+	print("Correct syntax is: \"py(thon3) main.py filename processingRate(nanoseconds) wantedBufferSize desiredRunTime(seconds)\"")
 	print("Terminating...")
 	sys.exit()
 
