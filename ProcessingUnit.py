@@ -14,6 +14,9 @@ class ProcessingUnit(object):
     def get_packet_buffer(self):
         return self.packetBuffer
 
+    def get_actual_max_buffer_size(self):
+        return self.actualMaxBufferSize
+
     def set_packet_buffer(self, packet_buffer):
         self.packetBuffer = packet_buffer
         self.calculate_buffer_size()
