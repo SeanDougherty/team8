@@ -8,6 +8,7 @@ class TupleList:
         self.tuple_list = [] # Each index in this tuple list represents 1 minute of packets to process
         self.day = "Undefined"
     
+	#Used to fill the tuple_list with CSV contents to be used for processing
     def create(self,filename):
         with open(filename, "r") as f:
             reader = csv.reader(f)
