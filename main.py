@@ -15,7 +15,7 @@ from ProcessingUnit import ProcessingUnit # for processing units
 from StatCalculator import StatCalculator
 
 # Cmd Line Args checking
-if not len(sys.argv) == 6:
+if not len(sys.argv) == 5:
 	print("Correct syntax is: \"py(thon3) main.py filename processingRate(nanoseconds) runTime(nanoseconds) wantedBufferSize desiredRunTime(seconds)\"")
 	print("Terminating...")
 	sys.exit()
@@ -24,10 +24,10 @@ if not len(sys.argv) == 6:
 
 # Command Line Arg Instantiation
 filename = sys.argv[1]  # First arg of command line must be filename of csv
-processingRate = int(sys.argv[2])  # Second arg of command line must be processing rate in int (nanoseconds)
-runTime = int(sys.argv[3])  # Arg of command line must be runtime in int (nanoseconds)
-wantedBufferSize = int(sys.argv[4])  # Fourth arg of command line must be desired buffer size (just a number)
-desired_run_time = int(sys.argv[5]) # Fifth arg of command line must be desired run time (in seconds)
+processingRate = int(sys.argv[2])  # Second arg of command line must be processing rate in int (packets per second)
+# runTime = int(sys.argv[3])  # Arg of command line must be runtime in int (nanoseconds)
+wantedBufferSize = int(sys.argv[3])  # Third arg of command line must be desired buffer size (just a number)
+desired_run_time = int(sys.argv[4]) # Fourth arg of command line must be desired run time (in seconds)
 
 #Instance Variables (maybe not needed since TupleList exists?)
 processingUnit = ProcessingUnit(processingRate, wantedBufferSize)
@@ -53,7 +53,7 @@ while (current_time < desired_run_time):
 	current_time += 1
 
 clock.start_stop()
-print(clock.elapsed)
+print("A " + str(desired_run_time) + " second long simulation was completed in " + str(clock.elapsed) + " second(s).")
 
 	# Calculate Statistics - Thomas
 		# timer
@@ -66,11 +66,11 @@ print(clock.elapsed)
 	#maxBufferSize
 
 	#print stats
-print(processingUnit.currentBufferSize)
+# print(processingUnit.currentBufferSize)
 myStats = StatCalculator(processingUnit)
 myStats.getStats()
 
-print("Program output for filename: '" + filename + "'.") #since TupleList doesn't store filename
+# print("Program output for filename: '" + filename + "'.") #since TupleList doesn't store filename
 # csvArray.print_tuple_list()
 #print(csvArray.tuple_list[0][0])
 #print(csvArray.tuple_list[:60])
