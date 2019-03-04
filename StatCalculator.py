@@ -13,6 +13,6 @@ class StatCalculator(object):
         print("Max Buffer Size Was: ")
         print(self.max_buffer_size)
         print("Average Latency Was: ")
-        print(self.average_latency)
+        print(str(self.average_latency) + " seconds")
         print("Average Throughput Was: ")
-        print(self.average_throughput)
+        print(str(self.average_throughput) + " packets/second")

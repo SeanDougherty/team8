@@ -52,6 +52,9 @@ while (current_time < desired_run_time):
 	processingUnit.process_data(current_time) # Process data for 1 second
 	current_time += 1
 
+#lengthOfpacketBufferAtEnd = len(processingUnit.packetBuffer) #debugging
+#print(processingUnit.packetBuffer[lengthOfpacketBufferAtEnd - 1]) #debugging
+
 clock.start_stop()
 print("A " + str(desired_run_time) + " second long simulation was completed in " + str(clock.elapsed) + " second(s).")
 

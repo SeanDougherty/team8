@@ -56,6 +56,12 @@ class ProcessingUnit(object):
             if self.packetBuffer[0][0] > processing_power:
                 self.latency.append(current_time - self.packetBuffer[0][1])
                 self.throughput.append(processing_power)
+                #print(self.packetBuffer[0]) #debugging
+                tempPacketSize = self.packetBuffer[0][0] - processing_power
+                tempSecondCount = self.packetBuffer[0][1]
+                del self.packetBuffer[0]
+                self.packetBuffer.insert(0, (tempPacketSize, tempSecondCount))
+                #print(self.packetBuffer[0]) #debugging
                 processing_power = 0
 
             # Else if you have enough processing power to process the entire packet_load,
