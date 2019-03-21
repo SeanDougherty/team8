@@ -1,3 +1,9 @@
+# Market Data Simulator
+
+Our goal for this project is to build a market data simulator for Exegy Inc. It should be able to process data provided by https://www.marketdatapeaks.net, simulating the latency and throughput of an actual system.  The end product should employ parallel processing. 
+
+---
+
 How to operate this simulator:
 
 This simulator is operated from the command line using python3
@@ -31,3 +37,17 @@ In future iterations we will report the number of packets lost when a buffer ove
 {desiredRunTime}
 
 This is how many seconds you would like to simulate. Currently, the max # of seconds is 60 x (# of data rows). This doesn't allow for the program to run until the buffer is cleared and is most definitely a bug noted by the developers. This bug is of high priority and will be addressed during the next sprint.
+
+Required Python Packages (install using pip):
+```
+datetime
+csv
+sys
+math
+statistics
+numpy
+pandas
+matplotlib
+pylab
+mplcursors
+```

@@ -1,0 +1,4 @@
+#David's .gitignore
+
+.vscode/
+__pycache__/
