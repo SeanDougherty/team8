@@ -43,7 +43,7 @@ class ProcessingUnit(object):
         self.calculate_buffer_size()
         self.packetBuffer.append(packet_load)
 
-    # Churns through packetBuffer for one simulated second
+    # Churns through packetBuffer for one simulated millisecond
     def process_data(self, current_time):
 
         # Create a copy of the processing rate to keep track of how much "processing power" we have left
