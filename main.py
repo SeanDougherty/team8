@@ -12,7 +12,7 @@ import math # for floor, ceil functions
 from TupleList import TupleList # for TupleLists
 from Clock import Clock # for timing things
 from ProcessingUnit import ProcessingUnit # for processing units
-# from StatCalculator import StatCalculator
+from StatCalculator import StatCalculator
 
 # Cmd Line Args checking
 if not len(sys.argv) == 5:
@@ -76,13 +76,13 @@ print("A " + str(desired_run_time) + " second long simulation was completed in "
 	#avg throughput
 	#maxBufferSize
 
-print(sum(processingUnit.latency)/len(processingUnit.latency))
-print(sum(processingUnit.throughput)/len(processingUnit.throughput))
+# print(sum(processingUnit.latency)/len(processingUnit.latency))
+# print(sum(processingUnit.throughput)/len(processingUnit.throughput))
 
 	#print stats
 # print(processingUnit.currentBufferSize)
-# myStats = StatCalculator(processingUnit)
-# myStats.getStats()
+myStats = StatCalculator(processingUnit)
+myStats.getStats()
 
 # print("Program output for filename: '" + filename + "'.") #since TupleList doesn't store filename
 # csvArray.print_tuple_list()
