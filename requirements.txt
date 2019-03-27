@@ -1,0 +1,5 @@
+statistics
+numpy
+pandas
+matplotlib
+mplcursors

@@ -38,16 +38,24 @@ In future iterations we will report the number of packets lost when a buffer ove
 
 This is how many seconds you would like to simulate. Currently, the max # of seconds is 60 x (# of data rows). This doesn't allow for the program to run until the buffer is cleared and is most definitely a bug noted by the developers. This bug is of high priority and will be addressed during the next sprint.
 
+Pyton 3.7.x only.
 Required Python Packages (install using pip):
+
 ```
-datetime
-csv
-sys
-math
+
 statistics
 numpy
 pandas
 matplotlib
-pylab
 mplcursors
+```
+
+To install these to your machine, use this command:
+```
+Windows:
+py -3.7 -m pip install -r requirements.txt
+```
+```
+Linux:
+no idea, someone else put this here
 ```
