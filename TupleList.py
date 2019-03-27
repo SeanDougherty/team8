@@ -2,6 +2,7 @@
 # Moved to a separate class by Dylan
 
 import csv
+import random
 
 class TupleList:
     def __init__(self):
@@ -27,15 +28,20 @@ class TupleList:
 
             f.close()
 
-    def convert_tuple_list_to_seconds(self):
+    def convert_tuple_list_to_seconds(self, distrib_mod):
         seconds_tuple_list = [] # Each index in this tuple list represents 1 second of packets to process
         minute_counter = 0
         for tuple in self.tuple_list:
             for iterator in range(60):
-                tempTuple = (int(tuple[0]),int(minute_counter+iterator))
+                load_size = float(tuple[0])
+                packet_lower_bound = round(load_size - load_size * distrib_mod)
+                packet_upper_bound = round(load_size + load_size * distrib_mod)
+                randomized_load_size =  int(random.randint(packet_lower_bound, packet_upper_bound))
+                tempTuple = (randomized_load_size, int(minute_counter+iterator))
                 seconds_tuple_list.append(tempTuple)
             minute_counter += 60
         return seconds_tuple_list
+
 
     def print_tuple_list(self):
         #print("Program output for filename: '" + filename + "'.") #filename is not stored, unless we want it to be.

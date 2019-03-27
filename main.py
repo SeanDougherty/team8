@@ -34,6 +34,7 @@ process_rate_packet_p_ms = 1 / processingRate
 
 #Instance Variables (maybe not needed since TupleList exists?)
 MILLISECONDS_PER_SECOND = 1000000
+DISTRIB_MOD = 0.2
 processingUnit = ProcessingUnit(process_rate_packet_p_ms, wantedBufferSize)
 clock = Clock()
 
@@ -44,7 +45,7 @@ clock.start_stop()
 # Build out our list of tuples ( time, packets_left )
 csvArray = TupleList()
 csvArray.create(filename)
-packetLoadsToProcess = csvArray.convert_tuple_list_to_seconds()
+packetLoadsToProcess = csvArray.convert_tuple_list_to_seconds(DISTRIB_MOD)
 
 # Poor attempt at limiting the runtime bug, needs rework
 max_run_time = len(packetLoadsToProcess)
