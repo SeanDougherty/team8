@@ -57,13 +57,10 @@ desired_run_time_ms = desired_run_time * MILLISECONDS_PER_SECOND
 # Create a while loop, where each loop simulates 1 millisecond of operation
 while (current_time < desired_run_time):
         #Randomize here
-        int rando
-        rando = random.randint(1,100)
-        if ((rando % 2) == 0):
-	    packet_load = packetLoadsToProcess[current_time]
-	    processingUnit.add_to_buffer(packet_load, current_time)
-	    processingUnit.process_data(current_time) # Process data for 1 millisecond
-	    current_time += 1
+	packet_load = packetLoadsToProcess[current_time]
+	processingUnit.add_to_buffer(packet_load, current_time)
+	processingUnit.process_data(current_time) # Process data for 1 millisecond
+	current_time += 1
 
 #lengthOfpacketBufferAtEnd = len(processingUnit.packetBuffer) #debugging
 #print(processingUnit.packetBuffer[lengthOfpacketBufferAtEnd - 1]) #debugging
