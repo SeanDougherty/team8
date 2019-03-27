@@ -39,4 +39,5 @@ class StatCalculator(object):
         print("Visualization Showing Now")
         self.drawGraph(self.latency, 'Latency vs. Seconds', 'seconds')
         self.drawGraph(self.throughput, 'Throughput vs. Seconds', 'packets/second')
+        plt.pause(1)
         input("Press Enter to End Simulation")
