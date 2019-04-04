@@ -16,12 +16,28 @@ from StatCalculator import StatCalculator
 import random 
 
 # Cmd Line Args checking
+incorrectInput = False
+
 if not len(sys.argv) == 5:
 	print("Correct syntax is: \"py(thon3) main.py filename processingRate(milliseconds/packet) wantedBufferSize desiredRunTime(seconds)\"")
 	print("Terminating...")
 	sys.exit()
 
+if float(sys.argv[2]) < 1:
+	print("Processing Rate cannot be less than 1")
+	incorrectInput = True
 
+if int(sys.argv[3]) < 1:
+	print("Desired Buffer Size cannot be less than 1")
+	incorrectInput = True
+
+if int(sys.argv[4]) < 1:
+	print("Desired Run Time cannot be less than 1")
+	incorrectInput = True
+
+if incorrectInput:
+	print("Incorrect input, terminating...")
+	sys.exit()
 
 # Command Line Arg Instantiation
 filename = sys.argv[1]  # First arg of command line must be filename of csv
