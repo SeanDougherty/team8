@@ -23,8 +23,8 @@ if not len(sys.argv) == 5:
 	print("Terminating...")
 	sys.exit()
 
-if float(sys.argv[2]) < 1:
-	print("Processing Rate cannot be less than 1")
+if float(sys.argv[2]) < 0:
+	print("Processing Rate cannot be less than 0")
 	incorrectInput = True
 
 if int(sys.argv[3]) < 1:
