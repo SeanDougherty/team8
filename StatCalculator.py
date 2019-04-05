@@ -31,7 +31,7 @@ class StatCalculator(object):
         pylab.ion()
         matplotlib.style.use('ggplot')
         print("Max Buffer Size Was: ")
-        print(self.max_buffer_size)
+        print(int(self.max_buffer_size))
         print("Average Latency Was: ")
         print(str(self.average_latency) + " milliseconds")
         print("Average Throughput Was: ")
