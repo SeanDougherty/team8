@@ -49,8 +49,8 @@ desired_run_time = int(sys.argv[4]) # Fourth arg of command line must be desired
 process_rate_packet_p_ms = 1 / processingRate
 
 #Instance Variables (maybe not needed since TupleList exists?)
-MILLISECONDS_PER_SECOND = 1000000
-DISTRIB_MOD = 0.2
+MILLISECONDS_PER_SECOND = 1000
+DISTRIB_MOD = 0.05
 processingUnit = ProcessingUnit(process_rate_packet_p_ms, wantedBufferSize)
 clock = Clock()
 
@@ -61,7 +61,7 @@ clock.start_stop()
 # Build out our list of tuples ( time, packets_left )
 csvArray = TupleList()
 csvArray.create(filename)
-packetLoadsToProcess = csvArray.convert_tuple_list_to_seconds(DISTRIB_MOD)
+packetLoadsToProcess = csvArray.convert_tuple_list_to_milliseconds(DISTRIB_MOD)
 
 # Poor attempt at limiting the runtime bug, needs rework
 max_run_time = len(packetLoadsToProcess)
@@ -72,9 +72,8 @@ if (desired_run_time > max_run_time):
 desired_run_time_ms = desired_run_time * MILLISECONDS_PER_SECOND
 
 # Create a while loop, where each loop simulates 1 millisecond of operation
-while (current_time < desired_run_time):
-	current_time_s = math.floor(current_time/1000)
-	packet_load = packetLoadsToProcess[current_time_s]
+while (current_time < desired_run_time_ms):
+	packet_load = packetLoadsToProcess[current_time]
 	processingUnit.add_to_buffer(packet_load, current_time)
 	processingUnit.process_data(current_time) # Process data for 1 millisecond
 	current_time += 1
