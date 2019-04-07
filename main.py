@@ -13,28 +13,43 @@ from TupleList import TupleList # for TupleLists
 from Clock import Clock # for timing things
 from ProcessingUnit import ProcessingUnit # for processing units
 from StatCalculator import StatCalculator
-import random 
+import random
+import os
 
 # Cmd Line Args checking
 incorrectInput = False
 
+# When arguments are missing that are required it will print a test example of how to correctly input data
 if not len(sys.argv) == 5:
 	print("Correct syntax is: \"py(thon3) main.py filename processingRate(milliseconds/packet) wantedBufferSize desiredRunTime(seconds)\"")
 	print("Terminating...")
 	sys.exit()
+ 
+# If a filepath is not given it will assume there was a user input error
+if not sys.argv[1]:
+	print("File path may be incorrect")
+	incorrectInput = True
 
-if float(sys.argv[2]) < 0:
+# if (sys.argv[2]) != type(str):
+	# print("Please try again")
+	# IncorrectInput = True
+
+# Will not accept negative or zero inputs for Processing Rate
+if float(sys.argv[2]) <= float(0):
 	print("Processing Rate cannot be less than 0")
 	incorrectInput = True
 
-if int(sys.argv[3]) < 1:
+# Will not accept Buffer Size that is less than 1
+if float(sys.argv[3]) < float(1.0):
 	print("Desired Buffer Size cannot be less than 1")
 	incorrectInput = True
 
-if int(sys.argv[4]) < 1:
+# Will not accept Run Time that is less than 1
+if float(sys.argv[4]) < float(1.0):
 	print("Desired Run Time cannot be less than 1")
 	incorrectInput = True
 
+# General shutdown message for incorrect inputs
 if incorrectInput:
 	print("Incorrect input, terminating...")
 	sys.exit()
