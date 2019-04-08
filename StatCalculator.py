@@ -27,9 +27,21 @@ class StatCalculator(object):
         lines = plt.plot(dataFrame)
         mplcursors.cursor(lines, hover = True)
 
+    def drawBarChart(self, values, objects, title, units):
+        plt.figure(str(title))         
+        y_pos = np.arange(len(objects))
+        plt.bar(y_pos, values, align='center', alpha=0.5)
+        plt.xticks(y_pos, objects)
+        plt.ylabel(units)
+        plt.title(title)
+
     def getStats(self):
         pylab.ion()
         matplotlib.style.use('ggplot')
+
+        latencies = [self.latency[int(len(self.latency)*.5)], self.latency[int(len(self.latency)*.75)], self.latency[int(len(self.latency)*.9)], self.latency[int(len(self.latency)*.99)], self.latency[int(len(self.latency)*.999)]]
+        objects = ("P50", "P75", "P90", "P99", "P99.9")
+
         print("Max Buffer Size Was: ")
         print(int(self.max_buffer_size))
         print("Average Latency Was: ")
@@ -37,7 +49,8 @@ class StatCalculator(object):
         print("Average Throughput Was: ")
         print(str(self.average_throughput) + " packets/millisecond")
         print("Visualization Showing Now")
-        self.drawGraph(self.latency, 'Latency vs. Seconds', 'milliseconds')
-        self.drawGraph(self.throughput, 'Throughput vs. Seconds', 'packets/millisecond')
+        self.drawGraph(self.latency, 'Latency vs. Milliseconds', 'milliseconds')
+        self.drawGraph(self.throughput, 'Throughput vs. Milliseconds', 'packets/millisecond')
+        self.drawBarChart(latencies, objects, "Latency Distribution", "milliseconds")
         plt.pause(1)
         input("Press Enter to End Simulation")

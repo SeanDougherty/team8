@@ -42,6 +42,7 @@ class ProcessingUnit(object):
     def add_to_buffer(self, packet_load, current_time):
         self.calculate_buffer_size()
         self.packetBuffer.append(packet_load)
+        # print(packet_load) #debugging
 
     # Churns through packetBuffer for one simulated millisecond
     def process_data(self, current_time):

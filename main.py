@@ -62,6 +62,7 @@ clock.start_stop()
 csvArray = TupleList()
 csvArray.create(filename)
 packetLoadsToProcess = csvArray.convert_tuple_list_to_milliseconds(DISTRIB_MOD)
+print("csv shit is done")
 
 # Poor attempt at limiting the runtime bug, needs rework
 max_run_time = len(packetLoadsToProcess)
