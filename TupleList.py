@@ -33,14 +33,14 @@ class TupleList:
         minute_counter = 0
         second_counter = 0
         for tuple in self.tuple_list:
-            load_size = float(int(tuple[0])/1000)
+            load_size = float(int(tuple[0]))
             for s_iterator in range(60):
-                for ms_iterator in range(1000):
-                    packet_lower_bound = round(load_size - load_size * distrib_mod)
-                    packet_upper_bound = round(load_size + load_size * distrib_mod)
-                    randomized_load_size =  int(random.randint(packet_lower_bound, packet_upper_bound))
-                    tempTuple = (randomized_load_size, minute_counter*60000+s_iterator*1000+ms_iterator)
-                    milliseconds_tuple_list.append(tempTuple)
+                # for ms_iterator in range(1000):
+                packet_lower_bound = round(load_size - load_size * distrib_mod)
+                packet_upper_bound = round(load_size + load_size * distrib_mod)
+                randomized_load_size =  int(random.randint(packet_lower_bound, packet_upper_bound))
+                tempTuple = (randomized_load_size, minute_counter*60+s_iterator)
+                milliseconds_tuple_list.append(tempTuple)
             minute_counter += 1
         return milliseconds_tuple_list
 
