@@ -28,19 +28,21 @@ class TupleList:
 
             f.close()
 
-    def convert_tuple_list_to_seconds(self, distrib_mod):
-        seconds_tuple_list = [] # Each index in this tuple list represents 1 second of packets to process
+    def convert_tuple_list_to_milliseconds(self, distrib_mod):
+        milliseconds_tuple_list = [] # Each index in this tuple list represents 1 millisecond of packets to process
         minute_counter = 0
+        second_counter = 0
         for tuple in self.tuple_list:
-            for iterator in range(60):
-                load_size = float(tuple[0])
+            load_size = float(int(tuple[0]))
+            for s_iterator in range(60):
+                # for ms_iterator in range(1000):
                 packet_lower_bound = round(load_size - load_size * distrib_mod)
                 packet_upper_bound = round(load_size + load_size * distrib_mod)
                 randomized_load_size =  int(random.randint(packet_lower_bound, packet_upper_bound))
-                tempTuple = (randomized_load_size, int(minute_counter+iterator))
-                seconds_tuple_list.append(tempTuple)
-            minute_counter += 60
-        return seconds_tuple_list
+                tempTuple = (randomized_load_size, minute_counter*60+s_iterator)
+                milliseconds_tuple_list.append(tempTuple)
+            minute_counter += 1
+        return milliseconds_tuple_list
 
 
     def print_tuple_list(self):
