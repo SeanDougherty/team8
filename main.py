@@ -19,7 +19,7 @@ import random
 incorrectInput = False
 
 if not len(sys.argv) == 5:
-	print("Correct syntax is: \"py(thon3) main.py filename processingRate(milliseconds/packet) wantedBufferSize desiredRunTime(seconds)\"")
+	print("Correct syntax is: \"py(thon3) main.py filename processingRate(microseconds/packet) wantedBufferSize desiredRunTime(seconds)\"")
 	print("Terminating...")
 	sys.exit()
 
@@ -46,7 +46,7 @@ wantedBufferSize = int(sys.argv[3])  # Third arg of command line must be desired
 desired_run_time = int(sys.argv[4]) # Fourth arg of command line must be desired run time (in seconds)
 
 # Convert processing rate from milliseconds / 1 packet to packets / 1 millisecond
-process_rate_packet_p_ms = 1 / processingRate
+process_rate_packet_p_ms = 1000 / processingRate
 
 #Instance Variables (maybe not needed since TupleList exists?)
 MILLISECONDS_PER_SECOND = 1000
@@ -62,7 +62,7 @@ clock.start_stop()
 csvArray = TupleList()
 csvArray.create(filename)
 packetLoadsToProcess = csvArray.convert_tuple_list_to_milliseconds(DISTRIB_MOD)
-print("csv shit is done")
+#print("csv shit is done")
 
 # Poor attempt at limiting the runtime bug, needs rework
 max_run_time = len(packetLoadsToProcess)
@@ -78,7 +78,7 @@ while (current_time < desired_run_time_ms):
 	processingUnit.add_to_buffer(packet_load, current_time)
 	processingUnit.process_data(current_time) # Process data for 1 millisecond
 	current_time += 1
-	# print(current_time)
+	#print(current_time)
 
 #lengthOfpacketBufferAtEnd = len(processingUnit.packetBuffer) #debugging
 #print(processingUnit.packetBuffer[lengthOfpacketBufferAtEnd - 1]) #debugging

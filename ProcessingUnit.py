@@ -29,14 +29,22 @@ class ProcessingUnit(object):
         self.calculate_buffer_size()
         return self.currentBufferSize
 
+    # Calculate current buffer size based off of array of packetLoad tuples and return value
+    def calculate_buffer_size(self):
+        self.currentBufferSize = 0
+        #This is inefficient
+        for packetLoad in self.packetBuffer:
+            self.currentBufferSize += packetLoad[0]
 
+        if (self.currentBufferSize > self.actualMaxBufferSize):
+            self.actualMaxBufferSize = self.currentBufferSize
+
+        return self.currentBufferSize
 
     def add_to_buffer(self, packet_load, current_time):
-        self.packetBuffer.append(packet_load)
-        self.currentBufferSize += packet_load[0]        
+        self.calculate_buffer_size()
         self.bufferSizeRunningTotal.append(self.currentBufferSize)
-        if self.currentBufferSize > self.maxBufferSize:
-            self.maxBufferSize = self.currentBufferSize
+        self.packetBuffer.append(packet_load)
         #print(packet_load) #debugging
 
     # Churns through packetBuffer for one simulated millisecond
@@ -52,13 +60,12 @@ class ProcessingUnit(object):
             if self.packetBuffer[0][0] > processing_power:
                 self.latency.append(current_time - self.packetBuffer[0][1])
                 self.throughput.append(processing_power)
-                self.currentBufferSize -= processing_power
-                print(self.packetBuffer[0]) #debugging
+                #print(self.packetBuffer[0]) #debugging
                 tempPacketSize = self.packetBuffer[0][0] - processing_power
                 tempSecondCount = self.packetBuffer[0][1]
                 del self.packetBuffer[0]
                 self.packetBuffer.insert(0, (tempPacketSize, tempSecondCount))
-                print(self.packetBuffer[0]) #debugging
+                #print(self.packetBuffer[0]) #debugging
                 processing_power = 0
 
             # Else if you have enough processing power to process the entire packet_load,
@@ -66,6 +73,5 @@ class ProcessingUnit(object):
             else:
                 self.latency.append(current_time - self.packetBuffer[0][1])
                 self.throughput.append(self.packetBuffer[0][0])
-                self.currentBufferSize -= self.packetBuffer[0][0]
                 processing_power -= self.packetBuffer[0][0]
                 del self.packetBuffer[0]
