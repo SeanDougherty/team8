@@ -13,7 +13,8 @@ from TupleList import TupleList # for TupleLists
 from Clock import Clock # for timing things
 from ProcessingUnit import ProcessingUnit # for processing units
 from StatCalculator import StatCalculator
-import random 
+import random
+
 
 # Cmd Line Args checking
 incorrectInput = False
@@ -22,16 +23,26 @@ if not len(sys.argv) == 5:
 	print("Correct syntax is: \"py(thon3) main.py filename processingRate(milliseconds/packet) wantedBufferSize desiredRunTime(seconds)\"")
 	print("Terminating...")
 	sys.exit()
+        
+if not sys.argv[1]:
+	print("File path may be incorrect")
+	incorrectInput = True
 
-if float(sys.argv[2]) < 0:
+# if (sys.argv[2]) != type(str):
+	# print("Please try again")
+	# IncorrectInput = True
+
+# Will not accept negative or zero inputs
+if float(sys.argv[2]) <= float(0):
 	print("Processing Rate cannot be less than 0")
 	incorrectInput = True
 
-if int(sys.argv[3]) < 1:
-	print("Desired Buffer Size cannot be less than 1")
-	incorrectInput = True
+# Will not accept 
+# if (sys.argv[3] == type(float)) or (sys.argv[3] < 1):
+	# print("Desired Buffer Size cannot be less than 1")
+	# incorrectInput = True
 
-if int(sys.argv[4]) < 1:
+if float(sys.argv[4]) < float(1.0):
 	print("Desired Run Time cannot be less than 1")
 	incorrectInput = True
 
@@ -63,6 +74,7 @@ csvArray = TupleList()
 csvArray.create(filename)
 packetLoadsToProcess = csvArray.convert_tuple_list_to_seconds(DISTRIB_MOD)
 
+
 # Poor attempt at limiting the runtime bug, needs rework
 max_run_time = len(packetLoadsToProcess)
 if (desired_run_time > max_run_time):
@@ -72,7 +84,7 @@ if (desired_run_time > max_run_time):
 desired_run_time_ms = desired_run_time * MILLISECONDS_PER_SECOND
 
 # Create a while loop, where each loop simulates 1 millisecond of operation
-while (current_time < desired_run_time):
+while (current_time < desired_run_time_ms):
 	current_time_s = math.floor(current_time/1000)
 	packet_load = packetLoadsToProcess[current_time_s]
 	processingUnit.add_to_buffer(packet_load, current_time)

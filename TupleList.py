@@ -45,5 +45,5 @@ class TupleList:
 
     def print_tuple_list(self):
         #print("Program output for filename: '" + filename + "'.") #filename is not stored, unless we want it to be.
-        print ("Date: " + self.day + ".")
+        return "Date: " + self.day + "."
         print(self.tuple_list)

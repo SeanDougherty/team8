@@ -23,6 +23,7 @@ class ProcessingUnit(object):
     def set_packet_buffer(self, packet_buffer):
         self.packetBuffer = packet_buffer
         self.calculate_buffer_size()
+        return self.packetBuffer
 
     def get_buffer_size(self):
         self.calculate_buffer_size()
@@ -41,7 +42,8 @@ class ProcessingUnit(object):
 
     def add_to_buffer(self, packet_load, current_time):
         self.calculate_buffer_size()
-        self.packetBuffer.append(packet_load)
+        self.packetBuffer.append(packet_load) #changed because it creates a cascading list
+        return self.packetBuffer
 
     # Churns through packetBuffer for one simulated millisecond
     def process_data(self, current_time):
