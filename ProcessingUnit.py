@@ -33,13 +33,13 @@ class ProcessingUnit(object):
 
     def add_to_buffer(self, packet_load, current_time):
         self.packetBuffer.append(packet_load)
-        self.currentBufferSize += packet_load[0]        
+        self.currentBufferSize += packet_load[0]
         self.bufferSizeRunningTotal.append(self.currentBufferSize)
         if self.currentBufferSize > self.maxBufferSize:
             self.maxBufferSize = self.currentBufferSize
         #print(packet_load) #debugging
 
-    # Churns through packetBuffer for one simulated millisecond
+    # Churns through packetBuffer for one simulated microsecond
     def process_data(self, current_time):
 
         # Create a copy of the processing rate to keep track of how much "processing power" we have left
