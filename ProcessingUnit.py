@@ -10,6 +10,7 @@ class ProcessingUnit(object):
         self.actualMaxBufferSize = 0
         self.currentBufferSize = 0
         self.processingRate = processing_rate
+        self.bufferSizeRunningTotal = []
 
     # def __convert_to_packets_per_second(self,processing_rate_ns):
     #
@@ -31,6 +32,7 @@ class ProcessingUnit(object):
     # Calculate current buffer size based off of array of packetLoad tuples and return value
     def calculate_buffer_size(self):
         self.currentBufferSize = 0
+        #This is inefficient
         for packetLoad in self.packetBuffer:
             self.currentBufferSize += packetLoad[0]
 
@@ -41,7 +43,9 @@ class ProcessingUnit(object):
 
     def add_to_buffer(self, packet_load, current_time):
         self.calculate_buffer_size()
+        self.bufferSizeRunningTotal.append(self.currentBufferSize)
         self.packetBuffer.append(packet_load)
+        #print(packet_load) #debugging
 
     # Churns through packetBuffer for one simulated millisecond
     def process_data(self, current_time):

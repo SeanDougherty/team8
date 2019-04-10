@@ -21,7 +21,7 @@ incorrectInput = False
 
 # When arguments are missing that are required it will print a test example of how to correctly input data
 if not len(sys.argv) == 5:
-	print("Correct syntax is: \"py(thon3) main.py filename processingRate(milliseconds/packet) wantedBufferSize desiredRunTime(seconds)\"")
+	print("Correct syntax is: \"py(thon3) main.py filename processingRate(microseconds/packet) wantedBufferSize desiredRunTime(seconds)\"")
 	print("Terminating...")
 	sys.exit()
  
@@ -61,11 +61,11 @@ wantedBufferSize = int(sys.argv[3])  # Third arg of command line must be desired
 desired_run_time = int(sys.argv[4]) # Fourth arg of command line must be desired run time (in seconds)
 
 # Convert processing rate from milliseconds / 1 packet to packets / 1 millisecond
-process_rate_packet_p_ms = 1 / processingRate
+process_rate_packet_p_ms = 1000 / processingRate
 
 #Instance Variables (maybe not needed since TupleList exists?)
-MILLISECONDS_PER_SECOND = 1000000
-DISTRIB_MOD = 0.2
+MILLISECONDS_PER_SECOND = 1000
+DISTRIB_MOD = 0.05
 processingUnit = ProcessingUnit(process_rate_packet_p_ms, wantedBufferSize)
 clock = Clock()
 
@@ -76,7 +76,8 @@ clock.start_stop()
 # Build out our list of tuples ( time, packets_left )
 csvArray = TupleList()
 csvArray.create(filename)
-packetLoadsToProcess = csvArray.convert_tuple_list_to_seconds(DISTRIB_MOD)
+packetLoadsToProcess = csvArray.convert_tuple_list_to_milliseconds(DISTRIB_MOD)
+#print("csv shit is done")
 
 # Poor attempt at limiting the runtime bug, needs rework
 max_run_time = len(packetLoadsToProcess)
@@ -84,15 +85,15 @@ if (desired_run_time > max_run_time):
 	desired_run_time = max_run_time
 
 # Convert runtime from seconds to ms
-desired_run_time_ms = desired_run_time * MILLISECONDS_PER_SECOND
+desired_run_time_ms = desired_run_time
 
 # Create a while loop, where each loop simulates 1 millisecond of operation
-while (current_time < desired_run_time):
-	current_time_s = math.floor(current_time/1000)
-	packet_load = packetLoadsToProcess[current_time_s]
+while (current_time < desired_run_time_ms):
+	packet_load = packetLoadsToProcess[current_time]
 	processingUnit.add_to_buffer(packet_load, current_time)
 	processingUnit.process_data(current_time) # Process data for 1 millisecond
 	current_time += 1
+	#print(current_time)
 
 #lengthOfpacketBufferAtEnd = len(processingUnit.packetBuffer) #debugging
 #print(processingUnit.packetBuffer[lengthOfpacketBufferAtEnd - 1]) #debugging
