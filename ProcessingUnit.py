@@ -4,6 +4,7 @@ class ProcessingUnit(object):
 
     def __init__(self, processing_rate, desired_max_buffer_size):
         self.packetBuffer = []
+        self.packetsDone = []
         self.latency = []
         self.throughput = []
         self.maxBufferSize = desired_max_buffer_size
@@ -11,6 +12,7 @@ class ProcessingUnit(object):
         self.currentBufferSize = 0
         self.processingRate = processing_rate
         self.bufferSizeRunningTotal = []
+
 
     # def __convert_to_packets_per_second(self,processing_rate_ns):
     #
@@ -47,6 +49,13 @@ class ProcessingUnit(object):
         self.packetBuffer.append(packet_load)
         #print(packet_load) #debugging
 
+    def add_to_done_buffer(self, packet_load, current_time):
+
+
+    def get_packet_load_from_done_buffer(self):
+        return self.packetsDone
+
+
     # Churns through packetBuffer for one simulated millisecond
     def process_data(self, current_time):
 
@@ -61,10 +70,11 @@ class ProcessingUnit(object):
                 self.latency.append(current_time - self.packetBuffer[0][1])
                 self.throughput.append(processing_power)
                 #print(self.packetBuffer[0]) #debugging
-                tempPacketSize = self.packetBuffer[0][0] - processing_power
-                tempSecondCount = self.packetBuffer[0][1]
+                temp_packet_size = self.packetBuffer[0][0] - processing_power
+                temp_time_entered_system = self.packetBuffer[0][1]
+                self.packetsDone.append(packetsDoneIntThisCycle, timeEnteredIntoSystem)
                 del self.packetBuffer[0]
-                self.packetBuffer.insert(0, (tempPacketSize, tempSecondCount))
+                self.packetBuffer.insert(0, (temp_packet_size, temp_time_entered_system))
                 #print(self.packetBuffer[0]) #debugging
                 processing_power = 0
 

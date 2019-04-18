@@ -24,7 +24,7 @@ if not len(sys.argv) == 5:
 	print("Correct syntax is: \"py(thon3) main.py filename processingRate(microseconds/packet) wantedBufferSize desiredRunTime(seconds)\"")
 	print("Terminating...")
 	sys.exit()
- 
+
 # If a filepath is not given it will assume there was a user input error
 if not sys.argv[1]:
 	print("File path may be incorrect")
@@ -93,6 +93,11 @@ while (current_time < desired_run_time_ms):
 	processingUnit.add_to_buffer(packet_load, current_time)
 	processingUnit.process_data(current_time) # Process data for 1 millisecond
 	current_time += 1
+    packetsToLoadToTwo = processingUnitOne.getFromDoneBuffer()
+    processingUnitOne.emptyBuffer()
+    processingUnitTwo.add_to_buffer(packetsToLoadToTwo)
+    processingUnitTwo.process_data(current_time)
+
 	#print(current_time)
 
 #lengthOfpacketBufferAtEnd = len(processingUnit.packetBuffer) #debugging
@@ -116,7 +121,7 @@ print("A " + str(desired_run_time) + " second long simulation was completed in "
 
 	#print stats
 # print(processingUnit.currentBufferSize)
-myStats = StatCalculator(processingUnit)
+myStats = StatCalculator(processingUnittwo)
 myStats.getStats()
 
 # print("Program output for filename: '" + filename + "'.") #since TupleList doesn't store filename
