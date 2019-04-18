@@ -72,7 +72,7 @@ class ProcessingUnit(object):
                 #print(self.packetBuffer[0]) #debugging
                 temp_packet_size = self.packetBuffer[0][0] - processing_power
                 temp_time_entered_system = self.packetBuffer[0][1]
-                self.packetsDone.append(packetsDoneIntThisCycle, timeEnteredIntoSystem)
+                self.packetsDone.append(packetsDoneIntThisCycle, timeThesePacketsEnteredIntoSystem)
                 del self.packetBuffer[0]
                 self.packetBuffer.insert(0, (temp_packet_size, temp_time_entered_system))
                 #print(self.packetBuffer[0]) #debugging
