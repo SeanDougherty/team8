@@ -1,6 +1,6 @@
 import os
 
-csv_file_name = raw_input("What is the title of your input file? ")
+csv_file_name = raw_input("What is the name of your .csv file? ")
 #print(type(csv_file_name))
 #print(csv_file_name)
 
