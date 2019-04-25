@@ -20,8 +20,8 @@ import os
 incorrectInput = False
 
 # When arguments are missing that are required it will print a test example of how to correctly input data
-if not len(sys.argv) == 5:
-	print("Correct syntax is: \"py(thon3) main.py filename processingRate(microseconds/packet) wantedBufferSize desiredRunTime(seconds)\"")
+if not len(sys.argv) == 6:
+	print("Correct syntax is: \"py(thon3) main.py filename processingRate(microseconds/packet) typeOfCSV(micro or default) wantedBufferSize desiredRunTime(seconds)\"")
 	print("Terminating...")
 	sys.exit()
  
@@ -75,7 +75,7 @@ clock.start_stop()
 
 # Build out our list of tuples ( time, packets_left )
 csvArray = TupleList()
-csvArray.create(filename)
+csvArray.create(filename) #This is the original csv
 packetLoadsToProcess = csvArray.convert_tuple_list_to_milliseconds(DISTRIB_MOD)
 #print("csv shit is done")
 
