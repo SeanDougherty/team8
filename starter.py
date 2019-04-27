@@ -16,7 +16,7 @@ desired_run_time_in_seconds = raw_input("Desired Run Time (s): ")
 #print(type(desired_run_time_in_seconds))
 #print(desired_run_time_in_seconds)
 
-csv_array_in_sec = raw_input("Is your csv aray in seconds? (0/1) ")
+csv_array_in_sec = raw_input("Is your csv aray in microseconds? (t/f) ")
 
 desired_processing_units = raw_input("Desired number of processing units: ")
 desired_processing_units = int(desired_processing_units)
