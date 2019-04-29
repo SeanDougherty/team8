@@ -13,75 +13,67 @@ class ProcessingUnit(object):
         self.processingRate = processing_rate
         self.bufferSizeRunningTotal = []
 
-
-    # def __convert_to_packets_per_second(self,processing_rate_ns):
-    #
-
     def get_packet_buffer(self):
         return self.packetBuffer
 
-    def get_actual_max_buffer_size(self):
+    def get_max_buffer_size(self):
         return self.actualMaxBufferSize
 
-    def set_packet_buffer(self, packet_buffer):
-        self.packetBuffer = packet_buffer
-        self.calculate_buffer_size()
-
-    def get_buffer_size(self):
-        self.calculate_buffer_size()
+    def get_current_buffer_size(self):
         return self.currentBufferSize
 
-    # Calculate current buffer size based off of array of packetLoad tuples and return value
     def calculate_buffer_size(self):
-        self.currentBufferSize = 0
-        #This is inefficient
-        for packetLoad in self.packetBuffer:
-            self.currentBufferSize += packetLoad[0]
-
         if (self.currentBufferSize > self.actualMaxBufferSize):
             self.actualMaxBufferSize = self.currentBufferSize
-
         return self.currentBufferSize
 
-    def add_to_buffer(self, packet_load, current_time):
-        self.calculate_buffer_size()
-        self.bufferSizeRunningTotal.append(self.currentBufferSize)
-        self.packetBuffer.append(packet_load)
-        #print(packet_load) #debugging
-
-    def add_to_done_buffer(self, packet_load, current_time):
-
-
-    def get_packet_load_from_done_buffer(self):
+    def get_packets_from_done_buffer(self):
         return self.packetsDone
 
-
     # Churns through packetBuffer for one simulated millisecond
-    def process_data(self, current_time):
+    def process_data(self, ms_being_simulated):
 
         # Create a copy of the processing rate to keep track of how much "processing power" we have left
         processing_power = self.processingRate
 
         # Process packets in the packetBuffer until your processing power runs out or the packetBuffer is emptied
-        while processing_power > 0 and len(self.packetBuffer) > 0:
+        while processing_power > 0:
             # If there are more packets in the next packetLoad than can be processed in this cycle,
             #   simply subtract the processing rate from your packetsLeft and update your metrics
             if self.packetBuffer[0][0] > processing_power:
-                self.latency.append(current_time - self.packetBuffer[0][1])
+                self.latency.append(ms_being_simulated - self.packetBuffer[0][1])
                 self.throughput.append(processing_power)
                 #print(self.packetBuffer[0]) #debugging
-                temp_packet_size = self.packetBuffer[0][0] - processing_power
-                temp_time_entered_system = self.packetBuffer[0][1]
-                self.packetsDone.append(packetsDoneIntThisCycle, timeThesePacketsEnteredIntoSystem)
+                packets_done_in_this_cycle = self.packetBuffer[0][0] - processing_power
+                time_added_to_system = self.packetBuffer[0][1]
+                self.packetsDone.append((packets_done_in_this_cycle, time_added_to_system))
                 del self.packetBuffer[0]
-                self.packetBuffer.insert(0, (temp_packet_size, temp_time_entered_system))
                 #print(self.packetBuffer[0]) #debugging
                 processing_power = 0
 
             # Else if you have enough processing power to process the entire packet_load,
             #   remove that packet_load and update your metrics
             else:
-                self.latency.append(current_time - self.packetBuffer[0][1])
+                self.latency.append(ms_being_simulated - self.packetBuffer[0][1])
                 self.throughput.append(self.packetBuffer[0][0])
                 processing_power -= self.packetBuffer[0][0]
                 del self.packetBuffer[0]
+
+
+    def add_packets_from_input_list(self, ms_being_simulated, packets_to_process):
+        packets_to_add = packets_to_process[ms_being_simulated]
+        time_added_to_system = ms_being_simulated
+        self.packetBuffer.append((packets_to_add, time_added_to_system))
+        self.currentBufferSize += packets_to_add
+        self.calculate_buffer_size()
+
+
+    # Add any packets from the done buffer of the previous processing unit. We assume there is no transfer time and
+    # that all 'processed' packets are able to be passed immediately to the next processing unit
+    # in the chain.
+    def add_packets_from_prior_proc_unit(self, proc_unit):
+        packets_to_add_list = proc_unit.get_packets_from_done_buffer()
+        for packets_to_add in packets_to_add_list:
+            self.packetBuffer.append(packets_to_add)
+            self.currentBufferSize += packets_to_add[0]
+        self.calculate_buffer_size()
