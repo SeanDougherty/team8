@@ -61,7 +61,7 @@ if incorrectInput:
 
 # Command Line Arg Instantiation
 filename = sys.argv[1]  # First arg of command line must be filename of csv
-desired_run_time_s = float(sys.argv[2])  # Second arg of command line must be desired run time (in seconds)
+desired_run_time_ms = float(sys.argv[2])  # Second arg of command line must be desired run time (in microseconds)
 csv_is_microseconds = bool(sys.argv[3])  # Third arg of command line must be a boolean of whether or not the csv is given in microsecond format
 num_of_proc_units = int(sys.argv[4])  # Fourth arg of command line must be an integer specifying the number of desired processing units
 
@@ -79,17 +79,10 @@ clock.start_stop()
 
 # Build out our list of tuples ( time, packets_left )
 csvArray = TupleList()
-csvArray.create(filename)
+csvArray.create(filename,csv_is_microseconds,desired_run_time_ms)
 packetLoadsToProcess = csvArray.convert_tuple_list_to_milliseconds(DISTRIB_MOD)
 #print("csv shit is done")
 
-# Poor attempt at limiting the runtime bug, needs rework
-max_run_time = len(packetLoadsToProcess)
-if (desired_run_time > max_run_time):
-	desired_run_time = max_run_time
-
-# Convert runtime from seconds to ms
-desired_run_time_ms = desired_run_time
 
 
 is_program_done = False
