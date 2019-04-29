@@ -36,7 +36,7 @@ if float(sys.argv[2]) < float(0):
 	print("Desired Run Time cannot be less than 0. Specifying a Run Time of 0 will cause the program to run until the entire CSV has been processed.")
 	incorrectInput = True
 
-if sys.argv[3] is not True and sys.argv[3] is not False:
+if sys.argv[3] != 't' and sys.argv[3] != 'f':
 	print("Expected boolean for whether or not csv is in milliseconds. Make sure your boolean is capitalized. (e.g.): False")
 	incorrectInput = True
 
@@ -61,49 +61,55 @@ if incorrectInput:
 
 # Command Line Arg Instantiation
 filename = sys.argv[1]  # First arg of command line must be filename of csv
-desired_run_time_ms = float(sys.argv[2])  # Second arg of command line must be desired run time (in microseconds)
-csv_is_microseconds = bool(sys.argv[3])  # Third arg of command line must be a boolean of whether or not the csv is given in microsecond format
+desired_run_time_ms = int(sys.argv[2])  # Second arg of command line must be desired run time (in microseconds)
+if sys.argv[3] == 't':	# Third arg of command line must be a boolean of whether or not the csv is given in microsecond format
+	csv_is_microseconds = True
+else:
+	csv_is_microseconds = False
 num_of_proc_units = int(sys.argv[4])  # Fourth arg of command line must be an integer specifying the number of desired processing units
 
 processing_unit_factory = ProcessingUnitFactory()
 proc_unit_list = processing_unit_factory.build_processing_unit_list(sys, num_of_proc_units)
 
 #Instance Variables (maybe not needed since TupleList exists?)
-MILLISECONDS_PER_SECOND = 1000
-DISTRIB_MOD = 0.05
 clock = Clock()
-
-# Main stuff here
-current_time = 0
 clock.start_stop()
 
-# Build out our list of tuples ( time, packets_left )
+# Build out our list of tuples in the structure: [(packets, simulated_time_index), (packets, simulated_time_index),...]
 csvArray = TupleList()
-csvArray.create(filename,csv_is_microseconds,desired_run_time_ms)
-packetLoadsToProcess = csvArray.convert_tuple_list_to_milliseconds(DISTRIB_MOD)
+packets_to_process = csvArray.create(filename, csv_is_microseconds, desired_run_time_ms)
 #print("csv shit is done")
-
-
 
 is_program_done = False
 ms_being_simulated = 0
 
 
+def check_is_program_done(desired_runtime_ms, ms_being_simulated, packets_to_process, current_proc_unit):
+	program_done = True
+	if ms_being_simulated+1 < desired_run_time_ms:
+		program_done = False
+	if ms_being_simulated+1 < len(packets_to_process):
+		program_done = False
+	if current_proc_unit.get_current_buffer_size() > 0:
+		program_done = False
+	return program_done
+
+
 # Create a while loop, where each loop simulates 1 millisecond of operation
 while is_program_done == False:
 	for idx in range(num_of_proc_units):
-		# current_proc_unit = get_proc_unit_at_idx(proc_unit_list, idx)
+		current_proc_unit = proc_unit_list[idx]
 		if idx == 0:
 			current_proc_unit.add_packets_from_input_list(ms_being_simulated, packets_to_process)
-			current_proc_unit.process_data()
+			current_proc_unit.process_data(ms_being_simulated)
 		else:
-			current_proc_unit.process_data()
+			current_proc_unit.process_data(ms_being_simulated)
 
 		if idx + 1 < num_of_proc_units:
-			# next_proc_unit = get_proc_unit_at_idx(proc_unit_list, idx+1)
+			next_proc_unit = proc_unit_list[idx+1]
 			next_proc_unit.add_packets_from_prior_proc_unit(current_proc_unit)
 
-		is_program_done = is_buffer_empty_and_input_list_empty(ms_being_simulated, packets_to_process, current_proc_unit)
+		is_program_done = check_is_program_done(desired_run_time_ms, ms_being_simulated, packets_to_process, current_proc_unit)
 
 	ms_being_simulated += 1
 
@@ -111,7 +117,7 @@ while is_program_done == False:
 #print(processingUnit.packetBuffer[lengthOfpacketBufferAtEnd - 1]) #debugging
 
 clock.start_stop()
-print("A " + str(desired_run_time) + " second long simulation was completed in " + str(clock.elapsed) + " second(s).")
+print("A " + str(desired_run_time_ms) + " second long simulation was completed in " + str(clock.elapsed) + " second(s).")
 
 	# Calculate Statistics
 		# timer
@@ -139,5 +145,6 @@ myStats.getStats()
 
 # 12947080 - w/ a processing rate of 14k
 # 11331280 - w/ a processing rate of 50k
+
 
 
