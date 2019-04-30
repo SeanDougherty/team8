@@ -16,12 +16,15 @@ from StatCalculator import StatCalculator
 import random
 import os
 
+#class variables
+csvType = "default"
+
 # Cmd Line Args checking
 incorrectInput = False
 
 # When arguments are missing that are required it will print a test example of how to correctly input data
 if not len(sys.argv) == 6:
-	print("Correct syntax is: \"py(thon3) main.py filename processingRate(microseconds/packet) typeOfCSV(micro or default) wantedBufferSize desiredRunTime(seconds)\"")
+	print("Correct syntax is: \"py(thon3) main.py filename processingRate(microseconds/packet) typeOfCSV(microseconds or default) desiredBufferSize desiredRunTime(seconds)\"")
 	print("Terminating...")
 	sys.exit()
  
@@ -39,13 +42,24 @@ if float(sys.argv[2]) <= float(0):
 	print("Processing Rate cannot be less than 0")
 	incorrectInput = True
 
+# Will not accept any string but "default" or "microseconds" for csvType
+if sys.argv[3] == "default":
+	csvType = sys.argv[3]
+
+elif sys.argv[3] == "microseconds":
+	csvType = sys.argv[3]
+else:
+	incorrectInput = True
+	print("CSV Type not recognized, should be either 'microseconds' or 'default'")
+	
+
 # Will not accept Buffer Size that is less than 1
-if float(sys.argv[3]) < float(1.0):
+if float(sys.argv[4]) < float(1.0):
 	print("Desired Buffer Size cannot be less than 1")
 	incorrectInput = True
 
 # Will not accept Run Time that is less than 1
-if float(sys.argv[4]) < float(1.0):
+if float(sys.argv[5]) < float(1.0):
 	print("Desired Run Time cannot be less than 1")
 	incorrectInput = True
 
@@ -57,8 +71,8 @@ if incorrectInput:
 # Command Line Arg Instantiation
 filename = sys.argv[1]  # First arg of command line must be filename of csv
 processingRate = float(sys.argv[2])  # Second arg of command line must be processing rate in int (milliseconds per packet)
-wantedBufferSize = int(sys.argv[3])  # Third arg of command line must be desired buffer size (just a number)
-desired_run_time = int(sys.argv[4]) # Fourth arg of command line must be desired run time (in seconds)
+wantedBufferSize = int(sys.argv[4])  # Third arg of command line must be desired buffer size (just a number)
+desired_run_time = int(sys.argv[5]) # Fourth arg of command line must be desired run time (in seconds)
 
 # Convert processing rate from milliseconds / 1 packet to packets / 1 millisecond
 process_rate_packet_p_ms = 1000 / processingRate
