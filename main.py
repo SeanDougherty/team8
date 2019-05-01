@@ -22,7 +22,7 @@ incorrectInput = False
 
 # When arguments are missing that are required it will print a test example of how to correctly input data
 if len(sys.argv) < 7:
-	print("Correct syntax is: \"py(thon3) main.py filename desired_runtime csv_is_in_microseconds number_of_processing_units processing_rate_one buffer_size_one processing_rate_two....\"")
+	print("Correct syntax is: \"py(thon3) main.py filename desired_runtime csv_is_in_microseconds(t/f) number_of_processing_units processing_rate_one buffer_size_one processing_rate_two....\"")
 	print("Terminating...")
 	sys.exit()
 
@@ -44,13 +44,13 @@ if float(sys.argv[4]) < float(1.0):
 	print("number_of_processing_units should be a value between 1 and 10.")
 	incorrectInput = True
 
-for idx in range(sys.argv[4]):
+for idx in range(int(sys.argv[4])):
 	if float(sys.argv[idx+5]) <= float(0):
 		print("Processing Rate cannot be less than 0")
 		incorrectInput = True
 
 	# Will not accept Buffer Size that is less than 1
-	if float(sys.argv[idx+6]) < float(1.0):
+	if float(int(sys.argv[idx+6])) < float(1.0):
 		print("Desired Buffer Size cannot be less than 1")
 		incorrectInput = True
 
@@ -78,6 +78,7 @@ clock.start_stop()
 # Build out our list of tuples in the structure: [(packets, simulated_time_index), (packets, simulated_time_index),...]
 csvArray = TupleList()
 packets_to_process = csvArray.create(filename, csv_is_microseconds, desired_run_time_ms)
+#print(packets_to_process)
 #print("csv shit is done")
 
 is_program_done = False
@@ -100,17 +101,20 @@ while is_program_done == False:
 	for idx in range(num_of_proc_units):
 		current_proc_unit = proc_unit_list[idx]
 		if idx == 0:
-			current_proc_unit.add_packets_from_input_list(ms_being_simulated, packets_to_process)
+			if ms_being_simulated < desired_run_time_ms:
+				#print("ms_being_simulated: " + str(ms_being_simulated))
+				current_proc_unit.add_packets_from_input_list(packets_to_process, ms_being_simulated)
 			current_proc_unit.process_data(ms_being_simulated)
 		else:
 			current_proc_unit.process_data(ms_being_simulated)
 
 		if idx + 1 < num_of_proc_units:
+			print("this is happening")
 			next_proc_unit = proc_unit_list[idx+1]
 			next_proc_unit.add_packets_from_prior_proc_unit(current_proc_unit)
 
 		is_program_done = check_is_program_done(desired_run_time_ms, ms_being_simulated, packets_to_process, current_proc_unit)
-
+	print("simulating: " + str(ms_being_simulated))
 	ms_being_simulated += 1
 
 #lengthOfpacketBufferAtEnd = len(processingUnit.packetBuffer) #debugging
@@ -134,8 +138,8 @@ print("A " + str(desired_run_time_ms) + " second long simulation was completed i
 
 	#print stats
 # print(processingUnit.currentBufferSize)
-myStats = StatCalculator(processingUnittwo)
-myStats.getStats()
+# myStats = StatCalculator(processingUnittwo)
+# myStats.getStats()
 
 # print("Program output for filename: '" + filename + "'.") #since TupleList doesn't store filename
 # csvArray.print_tuple_list()

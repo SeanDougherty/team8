@@ -8,6 +8,7 @@ import numpy as np, numpy.random
 
 class TupleList:
     def __init__(self):
+        self.rawCSV = []
         self.tuple_list = [] # Each index in this tuple list represents 1 minute of packets to process
         self.day = "Undefined"
         self.MICROSECOND_CONVERSION = 1000000
@@ -17,10 +18,14 @@ class TupleList:
         with open(filename, "r") as f:
             reader = csv.reader(f)
             next(reader) # to get rid of the garbage header
+            for row in reader:
+                self.rawCSV.append(row[1])
+
+            #print(self.rawCSV) #debugging
             #this shenanigans is to only read the day once so the program is faster
             #I didn't like changing the day every loop, that seems redundant and wasteful.
 
-            row_count = sum(1 for row in f) - 1 # -1 to account for the header row
+            row_count = len(self.rawCSV)
 
             if csv_in_microseconds:
                 if row_count < desired_runtime_ms or desired_runtime_ms == 0:
@@ -34,29 +39,28 @@ class TupleList:
                 else:
                     desired_ms = desired_runtime_ms
 
-            tuple_list = self.build_tuple_list(desired_ms, csv_in_microseconds, reader)
-            f.close()
+            tuple_list = self.build_tuple_list(desired_ms, csv_in_microseconds, self.rawCSV)
 
             return tuple_list
 
-    def build_tuple_list(self, desired_ms,csv_in_microseconds, reader):
+    def build_tuple_list(self, desired_ms,csv_in_microseconds, rawCSV):
             tuple_list = []
             if csv_in_microseconds:
                 for idx in range(desired_ms):
-                    row = next(reader)
-                    tuple_list.append((idx, row[1]))
+                    num_of_packets = rawCSV[idx]
+                    tuple_list.append((idx, num_of_packets))
             else:
                 current_row = 0  # The 0th row refers to the first row containing packet data in the csv
-                row = next(reader)
-                packets_per_second = row[1]
+                packets_per_second = int(rawCSV[current_row])
                 packet_distribution = np.round_((np.random.dirichlet(np.ones(self.MICROSECOND_CONVERSION), size=1) * packets_per_second)[0])
                 for idx in range(desired_ms):
                     if math.floor(idx/(self.MICROSECOND_CONVERSION*60)) > current_row:
                         current_row += 1
-                        row = next(reader)
-                        packets_per_second = row[1]
+                        packets_per_second = rawCSV[current_row]
                         packet_distribution = np.round_((np.random.dirichlet(np.ones(self.MICROSECOND_CONVERSION), size=1)*packets_per_second)[0])
+                        #print("packet_distribution = " + str(packet_distribution))
                     packets = packet_distribution[idx % self.MICROSECOND_CONVERSION]
+                    #print(packets)
                     tuple_list.append((idx, packets))
 
             return tuple_list
