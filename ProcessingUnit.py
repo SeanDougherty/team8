@@ -77,10 +77,10 @@ class ProcessingUnit(object):
 
     def add_packets_from_input_list(self, packets_to_process, ms_being_simulated):
         packets_to_add = packets_to_process[ms_being_simulated][0]
-        print("packets_to_add: " + str(packets_to_process))
+        print("packets_to_process: " + str(packets_to_process))
         time_added_to_system = ms_being_simulated
         self.packetBuffer.append((packets_to_add, time_added_to_system))
-        #print("packets_to_add: " + str(packets_to_add))
+        print("packets_to_add: " + str(packets_to_add))
         self.currentBufferSize += packets_to_add
         self.calculate_buffer_size()
 

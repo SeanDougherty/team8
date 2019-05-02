@@ -61,7 +61,7 @@ class TupleList:
                         #print("packet_distribution = " + str(packet_distribution))
                     packets = packet_distribution[idx % self.MICROSECOND_CONVERSION]
                     #print(packets)
-                    tuple_list.append((idx, packets))
+                    tuple_list.append((packets, idx))
 
             return tuple_list
 

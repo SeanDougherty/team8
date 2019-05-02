@@ -111,7 +111,7 @@ while is_program_done == False:
 			current_proc_unit.process_data(ms_being_simulated)
 
 		if idx + 1 < num_of_proc_units:
-			print("this is happening")
+			#print("this is happening")
 			next_proc_unit = proc_unit_list[idx+1]
 			next_proc_unit.add_packets_from_prior_proc_unit(current_proc_unit)
 
