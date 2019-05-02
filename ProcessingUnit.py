@@ -46,15 +46,18 @@ class ProcessingUnit(object):
         while processing_power > 0 and len(self.packetBuffer) > 0:
             # If there are more packets in the next packetLoad than can be processed in this cycle,
             #   simply subtract the processing rate from your packetsLeft and update your metrics
-            if self.packetBuffer[0][1] > processing_power :
+            if self.packetBuffer[0][0] > processing_power :
                 self.latency.append(ms_being_simulated - self.packetBuffer[0][1])
                 self.throughput.append(processing_power)
+                #print("self.currentBufferSize = " + self.currentBufferSize)
                 self.currentBufferSize = self.currentBufferSize - processing_power
                 #print(self.packetBuffer[0]) #debugging
                 packets_left_to_do = self.packetBuffer[0][0] - processing_power
                 time_added_to_system = self.packetBuffer[0][1]
                 packets_done_in_this_cycle = processing_power
                 self.packetsDone.append((packets_done_in_this_cycle, time_added_to_system))
+                print("self.packetDone.append in if: " + str((packets_done_in_this_cycle, time_added_to_system)))
+
                 del self.packetBuffer[0]
                 self.packetBuffer.insert(0, (packets_left_to_do, time_added_to_system))
                 #print(self.packetBuffer[0]) #debugging
@@ -68,6 +71,7 @@ class ProcessingUnit(object):
                 self.currentBufferSize = self.currentBufferSize - self.packetBuffer[0][0]
                 self.packetsDone.append(self.packetBuffer[0])
                 processing_power -= self.packetBuffer[0][0]
+                print("self.packetBuffer[0] in else: " + str(self.packetBuffer[0]))
                 del self.packetBuffer[0]
 
 
@@ -88,5 +92,6 @@ class ProcessingUnit(object):
         packets_to_add_list = proc_unit.get_packets_from_done_buffer()
         for packets_to_add in packets_to_add_list:
             self.packetBuffer.append(packets_to_add)
+            print("packets being added = "  + str(packets_to_add))
             self.currentBufferSize += packets_to_add[0]
         self.calculate_buffer_size()

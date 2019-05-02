@@ -104,8 +104,10 @@ while is_program_done == False:
 			if ms_being_simulated < desired_run_time_ms:
 				#print("ms_being_simulated: " + str(ms_being_simulated))
 				current_proc_unit.add_packets_from_input_list(packets_to_process, ms_being_simulated)
+			print("Current Processing Unit = " + str(idx))
 			current_proc_unit.process_data(ms_being_simulated)
 		else:
+			print("Current Processing Unit = " + str(idx))
 			current_proc_unit.process_data(ms_being_simulated)
 
 		if idx + 1 < num_of_proc_units:
