@@ -1,35 +1,27 @@
+# All inputs will need to be added within " "
+# if we have time I will find a way to auto do this so it is not on the user
+
 import os
 
 csv_file_name = input("What is the name of your .csv file? ")
-#print(type(csv_file_name))
-#print(csv_file_name)
-
-#processing_rate = input("Processing Rate (aka Packets Processed per Second: ")
-#print(type(processing_rate))
-#print(processing_rate)
-
-#desired_buffer_size = input("Desired Buffer Size: ")
-#print(type(desired_buffer_size))
-#print(desired_buffer_size)
+print(type(csv_file_name))
 
 desired_run_time_in_seconds = input("Desired Run Time (s): ")
-#print(type(desired_run_time_in_seconds))
-#print(desired_run_time_in_seconds)
+print(type(desired_run_time_in_seconds))
 
 csv_array_in_sec = input("Is your csv aray in microseconds? (t/f) ")
-
+print(type(csv_array_in_sec))
 desired_processing_units = input("Desired number of processing units: ")
-desired_processing_units = int(desired_processing_units)
-#print(type(desired_processing_units))
-#print(desired_processing_units)
+desired_processing_units_int = int(desired_processing_units)
+print(type(desired_processing_units))
 
-if desired_processing_units == 1:
+if desired_processing_units_int == 1:
     pu1_pr = input("Desired processing rate for processing unit 1: ")
     pu1_bs = input("Desired buffer size for processing unit 1: ")
     desired_processing_units = str(desired_processing_units)
     caller = "python3 main.py "+ csv_file_name+ " " + desired_run_time_in_seconds + " " + csv_array_in_sec + " " + desired_processing_units + " " + pu1_pr + " " + pu1_bs
 
-if desired_processing_units == 2:
+if desired_processing_units_int == 2:
     pu1_pr = input("Desired processing rate for processing unit 1: ")
     pu1_bs = input("Desired buffer size for processing unit 1: ")
     pu2_pr = input("Desired processing rate for processing unit 2: ")
@@ -37,7 +29,7 @@ if desired_processing_units == 2:
     desired_processing_units = str(desired_processing_units)
     caller = "python3 main.py "+ csv_file_name+ " " + desired_run_time_in_seconds + " " + csv_array_in_sec + " " + desired_processing_units + " " + pu1_pr + " " + pu1_bs + " " + pu2_pr + " " + pu2_bs
 
-if desired_processing_units == 3:
+if desired_processing_units_int == 3:
     pu1_pr = input("Desired processing rate for processing unit 1: ")
     pu1_bs = input("Desired buffer size for processing unit 1: ")
     pu2_pr = input("Desired processing rate for processing unit 2: ")
@@ -47,7 +39,7 @@ if desired_processing_units == 3:
     desired_processing_units = str(desired_processing_units)
     caller = "python3 main.py "+ csv_file_name+ " " + desired_run_time_in_seconds + " " + csv_array_in_sec + " " + desired_processing_units + " " + pu1_pr + " " + pu1_bs + " " + pu2_pr + " " + pu2_bs + " " + pu3_pr + " " + pu3_bs
 
-if desired_processing_units == 4:
+if desired_processing_units_int == 4:
     pu1_pr = input("Desired processing rate for processing unit 1: ")
     pu1_bs = input("Desired buffer size for processing unit 1: ")
     pu2_pr = input("Desired processing rate for processing unit 2: ")
@@ -59,7 +51,7 @@ if desired_processing_units == 4:
     desired_processing_units = str(desired_processing_units)
     caller = "python3 main.py "+ csv_file_name+ " " + desired_run_time_in_seconds + " " + csv_array_in_sec + " " + desired_processing_units + " " + pu1_pr + " " + pu1_bs + " " + pu2_pr + " " + pu2_bs + " " + pu3_pr + " " + pu3_bs + " " + pu4_pr + " " + pu4_bs
 
-if desired_processing_units == 5:
+if desired_processing_units_int == 5:
     pu1_pr = input("Desired processing rate for processing unit 1: ")
     pu1_bs = input("Desired buffer size for processing unit 1: ")
     pu2_pr = input("Desired processing rate for processing unit 2: ")
@@ -73,7 +65,7 @@ if desired_processing_units == 5:
     desired_processing_units = str(desired_processing_units)
     caller = "python3 main.py "+ csv_file_name+ " " + desired_run_time_in_seconds + " " + csv_array_in_sec + " " + desired_processing_units + " " + pu1_pr + " " + pu1_bs + " " + pu2_pr + " " + pu2_bs + " " + pu3_pr + " " + pu3_bs + " " + pu4_pr + " " + pu4_bs + " " + pu5_pr + " " + pu5_bs
 
-if desired_processing_units == 6:
+if desired_processing_units_int == 6:
     pu1_pr = input("Desired processing rate for processing unit 1: ")
     pu1_bs = input("Desired buffer size for processing unit 1: ")
     pu2_pr = input("Desired processing rate for processing unit 2: ")
@@ -89,7 +81,7 @@ if desired_processing_units == 6:
     desired_processing_units = str(desired_processing_units)
     caller = "python3 main.py "+ csv_file_name+ " " + desired_run_time_in_seconds + " " + csv_array_in_sec + " " + desired_processing_units + " " + pu1_pr + " " + pu1_bs + " " + pu2_pr + " " + pu2_bs + " " + pu3_pr + " " + pu3_bs + " " + pu4_pr + " " + pu4_bs + " " + pu5_pr + " " + pu5_bs + " " + pu6_pr + " " + pu6_bs
 
-if desired_processing_units == 7:
+if desired_processing_units_int == 7:
     pu1_pr = input("Desired processing rate for processing unit 1: ")
     pu1_bs = input("Desired buffer size for processing unit 1: ")
     pu2_pr = input("Desired processing rate for processing unit 2: ")
@@ -107,7 +99,7 @@ if desired_processing_units == 7:
     desired_processing_units = str(desired_processing_units)
     caller = "python3 main.py "+ csv_file_name+ " " + desired_run_time_in_seconds + " " + csv_array_in_sec + " " + desired_processing_units + " " + pu1_pr + " " + pu1_bs + " " + pu2_pr + " " + pu2_bs + " " + pu3_pr + " " + pu3_bs + " " + pu4_pr + " " + pu4_bs + " " + pu5_pr + " " + pu5_bs + " " + pu6_pr + " " + pu6_bs + " " + pu7_pr + " " + pu7_bs
 
-if desired_processing_units == 8:
+if desired_processing_units_int == 8:
     pu1_pr = input("Desired processing rate for processing unit 1: ")
     pu1_bs = input("Desired buffer size for processing unit 1: ")
     pu2_pr = input("Desired processing rate for processing unit 2: ")
@@ -127,7 +119,7 @@ if desired_processing_units == 8:
     desired_processing_units = str(desired_processing_units)
     caller = "python3 main.py "+ csv_file_name+ " " + desired_run_time_in_seconds + " " + csv_array_in_sec + " " + desired_processing_units + " " + pu1_pr + " " + pu1_bs + " " + pu2_pr + " " + pu2_bs + " " + pu3_pr + " " + pu3_bs + " " + pu4_pr + " " + pu4_bs + " " + pu5_pr + " " + pu5_bs + " " + pu6_pr + " " + pu6_bs + " " + pu7_pr + " " + pu7_bs + " " + pu8_pr + " " + pu8_bs
 
-if desired_processing_units == 9:
+if desired_processing_units_int == 9:
     pu1_pr = input("Desired processing rate for processing unit 1: ")
     pu1_bs = input("Desired buffer size for processing unit 1: ")
     pu2_pr = input("Desired processing rate for processing unit 2: ")
@@ -149,7 +141,7 @@ if desired_processing_units == 9:
     desired_processing_units = str(desired_processing_units)
     caller = "python3 main.py "+ csv_file_name+ " " + desired_run_time_in_seconds + " " + csv_array_in_sec + " " + desired_processing_units + " " + pu1_pr + " " + pu1_bs + " " + pu2_pr + " " + pu2_bs + " " + pu3_pr + " " + pu3_bs + " " + pu4_pr + " " + pu4_bs + " " + pu5_pr + " " + pu5_bs + " " + pu6_pr + " " + pu6_bs + " " + pu7_pr + " " + pu7_bs + " " + pu8_pr + " " + pu8_bs + " " + pu9_pr + " " + pu9_bs
 
-if desired_processing_units == 10:
+if desired_processing_units_int == 10:
     pu1_pr = input("Desired processing rate for processing unit 1: ")
     pu1_bs = input("Desired buffer size for processing unit 1: ")
     pu2_pr = input("Desired processing rate for processing unit 2: ")
