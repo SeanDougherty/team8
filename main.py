@@ -16,6 +16,7 @@ from ProcessingUnitFactory import ProcessingUnitFactory
 from StatCalculator import StatCalculator
 import random
 import os
+import numpy as np 
 
 # Cmd Line Args checking
 incorrectInput = False
@@ -104,10 +105,10 @@ while is_program_done == False:
 			if ms_being_simulated < desired_run_time_ms:
 				#print("ms_being_simulated: " + str(ms_being_simulated))
 				current_proc_unit.add_packets_from_input_list(packets_to_process, ms_being_simulated)
-			print("Current Processing Unit = " + str(idx))
+			# print("Current Processing Unit = " + str(idx))
 			current_proc_unit.process_data(ms_being_simulated)
 		else:
-			print("Current Processing Unit = " + str(idx))
+			# print("Current Processing Unit = " + str(idx))
 			current_proc_unit.process_data(ms_being_simulated)
 
 		if idx + 1 < num_of_proc_units:
@@ -116,11 +117,24 @@ while is_program_done == False:
 			next_proc_unit.add_packets_from_prior_proc_unit(current_proc_unit)
 
 		is_program_done = check_is_program_done(desired_run_time_ms, ms_being_simulated, packets_to_process, current_proc_unit)
-	print("simulating: " + str(ms_being_simulated))
+	# print("simulating: " + str(ms_being_simulated))
 	ms_being_simulated += 1
 
 #lengthOfpacketBufferAtEnd = len(processingUnit.packetBuffer) #debugging
 #print(processingUnit.packetBuffer[lengthOfpacketBufferAtEnd - 1]) #debugging
+def find_avg_latency(latency, throughput):
+	latency_list = []
+	for idx in range(len(latency)):
+		for idx_2 in range(int(throughput[idx])):
+			latency_list.append(latency[idx])
+
+	#print(latency)
+	#print(throughput)
+	#print(latency_list)
+	return np.mean(latency_list)
+
+print("Finding average latency...\n")
+print("avg latency: " + str(find_avg_latency(proc_unit_list[num_of_proc_units-1].latency, proc_unit_list[num_of_proc_units-1].throughput)))
 
 clock.start_stop()
 print("A " + str(desired_run_time_ms) + " second long simulation was completed in " + str(clock.elapsed) + " second(s).")

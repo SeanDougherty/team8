@@ -48,16 +48,26 @@ class TupleList:
             if csv_in_microseconds:
                 for idx in range(desired_ms):
                     num_of_packets = rawCSV[idx]
-                    tuple_list.append((idx, num_of_packets))
-            else:
+                    print("num_of_packets = " + str(num_of_packets))
+                    tuple_list.append((int(num_of_packets), idx))
+            else:                
                 current_row = 0  # The 0th row refers to the first row containing packet data in the csv
                 packets_per_second = int(rawCSV[current_row])
-                packet_distribution = np.round_((np.random.dirichlet(np.ones(self.MICROSECOND_CONVERSION), size=1) * packets_per_second)[0])
+                base_packets_per_microsecond = int(packets_per_second / self.MICROSECOND_CONVERSION)
+                remainder_packets_per_microsecond = packets_per_second % self.MICROSECOND_CONVERSION
+                packet_distribution = np.ones(self.MICROSECOND_CONVERSION)*base_packets_per_microsecond
+                packet_distribution[0:remainder_packets_per_microsecond] += 1
+                # trash = np.round_((np.random.dirichlet(np.ones(self.MICROSECOND_CONVERSION)*35, size=1) * packets_per_second)[0])
+                #print(packet_distribution[:300])
                 for idx in range(desired_ms):
                     if math.floor(idx/(self.MICROSECOND_CONVERSION*60)) > current_row:
                         current_row += 1
                         packets_per_second = rawCSV[current_row]
-                        packet_distribution = np.round_((np.random.dirichlet(np.ones(self.MICROSECOND_CONVERSION), size=1)*packets_per_second)[0])
+                        base_packets_per_microsecond = int(packets_per_second / self.MICROSECOND_CONVERSION)
+                        remainder_packets_per_microsecond = packets_per_second % self.MICROSECOND_CONVERSION
+                        packet_distribution = np.ones(self.MICROSECOND_CONVERSION)*base_packets_per_microsecond
+                        packet_distribution[0:remainder_packets_per_microsecond] += 1
+                        # trash = np.round_((np.random.dirichlet(np.ones(self.MICROSECOND_CONVERSION)*35, size=1)*packets_per_second)[0])
                         #print("packet_distribution = " + str(packet_distribution))
                     packets = packet_distribution[idx % self.MICROSECOND_CONVERSION]
                     #print(packets)
