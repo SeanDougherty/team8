@@ -8,11 +8,13 @@ from ProcessingUnitFactory import ProcessingUnitFactory
 from StatCalculator import StatCalculator
 import random
 import os
+import sys
+import numpy as np
         
     #packet_load_array format [(3,0), (4,1), (6,2), (7,3)] packet_load, index (or timestamp)
     #processing_unit_array format [processing_unit_objects with processing rate and buffer size set]
 
-def main(packet_load_array, processing_unit_array):
+def main(packets_to_process, sys_vector):
 
     #Instance Variables (maybe not needed since TupleList exists?)
     clock = Clock()
@@ -20,6 +22,14 @@ def main(packet_load_array, processing_unit_array):
 
     is_program_done = False
     ms_being_simulated = 0 
+    
+    ###Arguments
+    num_of_proc_units = sys_vector[4]
+    desired_run_time_ms = sys_vector[2]
+    c = ProcessingUnitFactory()
+    proc_unit_list = c.build_processing_unit_list(sys_vector,1)
+    #print(proc_unit_list)
+    
     
     def check_is_program_done(desired_runtime_ms, ms_being_simulated, packets_to_process, current_proc_unit):
         program_done = True
@@ -61,4 +71,18 @@ def main(packet_load_array, processing_unit_array):
     clock.start_stop()
     print("A " + str(desired_run_time_ms) + " second long simulation was completed in " + str(clock.elapsed) + " second(s).")
     
-    #add return statement that will return the average latency that david is working on
+   #######add return statement that will return the average latency that david is working on
+    def find_avg_latency(latency, throughput):
+        latency_list = []
+        for idx in range(len(latency)):
+            for idx_2 in range(int(throughput[idx])):
+                latency_list.append(latency[idx])
+
+        #print(latency)
+        #print(throughput)
+        #print(latency_list)
+        return np.mean(latency_list)
+
+    print("Finding average latency...\n")
+    print("avg latency: " + str(find_avg_latency(proc_unit_list[num_of_proc_units-1].latency, proc_unit_list[num_of_proc_units-1].throughput)))
+    return str(find_avg_latency(proc_unit_list[num_of_proc_units-1].latency, proc_unit_list[num_of_proc_units-1].throughput))

@@ -70,7 +70,7 @@ else:
 num_of_proc_units = int(sys.argv[4])  # Fourth arg of command line must be an integer specifying the number of desired processing units
 
 processing_unit_factory = ProcessingUnitFactory()
-proc_unit_list = processing_unit_factory.build_processing_unit_list(sys, num_of_proc_units)
+proc_unit_list = processing_unit_factory.build_processing_unit_list(sys.argv, num_of_proc_units)
 
 #Instance Variables (maybe not needed since TupleList exists?)
 clock = Clock()
@@ -123,7 +123,7 @@ while is_program_done == False:
 #lengthOfpacketBufferAtEnd = len(processingUnit.packetBuffer) #debugging
 #print(processingUnit.packetBuffer[lengthOfpacketBufferAtEnd - 1]) #debugging
 def find_avg_latency(latency, throughput):
-	latency_list = []
+    latency_list = []
 	for idx in range(len(latency)):
 		for idx_2 in range(int(throughput[idx])):
 			latency_list.append(latency[idx])
