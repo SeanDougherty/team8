@@ -4,16 +4,16 @@
 import os
 
 csv_file_name = input("What is the name of your .csv file? ")
-print(type(csv_file_name))
+#print(type(csv_file_name))
 
 desired_run_time_in_seconds = input("Desired Run Time (s): ")
-print(type(desired_run_time_in_seconds))
+#print(type(desired_run_time_in_seconds))
 
 csv_array_in_sec = input("Is your csv aray in microseconds? (t/f) ")
-print(type(csv_array_in_sec))
+#print(type(csv_array_in_sec))
 desired_processing_units = input("Desired number of processing units: ")
 desired_processing_units_int = int(desired_processing_units)
-print(type(desired_processing_units))
+#print(type(desired_processing_units))
 
 if desired_processing_units_int == 1:
     pu1_pr = input("Desired processing rate for processing unit 1: ")
@@ -166,6 +166,6 @@ if desired_processing_units_int == 10:
     caller = "python3 main.py "+ csv_file_name+ " " + desired_run_time_in_seconds + " " + csv_array_in_sec + " " + desired_processing_units + " " + pu1_pr + " " + pu1_bs + " " + pu2_pr + " " + pu2_bs + " " + pu3_pr + " " + pu3_bs + " " + pu4_pr + " " + pu4_bs + " " + pu5_pr + " " + pu5_bs + " " + pu6_pr + " " + pu6_bs + " " + pu7_pr + " " + pu7_bs + " " + pu8_pr + " " + pu8_bs + " " + pu9_pr + " " + pu9_bs + " " + pu10_pr + " " + pu10_bs + " "
 
 
-print(caller)
+#print(caller)
 
 os.system(caller)
