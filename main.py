@@ -123,7 +123,7 @@ while is_program_done == False:
 #lengthOfpacketBufferAtEnd = len(processingUnit.packetBuffer) #debugging
 #print(processingUnit.packetBuffer[lengthOfpacketBufferAtEnd - 1]) #debugging
 def find_avg_latency(latency, throughput):
-    latency_list = []
+	latency_list = []
 	for idx in range(len(latency)):
 		for idx_2 in range(int(throughput[idx])):
 			latency_list.append(latency[idx])
@@ -134,7 +134,7 @@ def find_avg_latency(latency, throughput):
 	return np.mean(latency_list)
 
 print("Finding average latency...\n")
-print("avg latency: " + str(find_avg_latency(proc_unit_list[num_of_proc_units-1].latency, proc_unit_list[num_of_proc_units-1].throughput)))
+print("avg latency: " + str(find_avg_latency(proc_unit_list[num_of_proc_units-1].latency, proc_unit_list[num_of_proc_units-1].throughput)) + " μs")
 
 clock.start_stop()
 print("A " + str(desired_run_time_ms) + " second long simulation was completed in " + str(clock.elapsed) + " second(s).")

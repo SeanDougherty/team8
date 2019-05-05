@@ -48,7 +48,7 @@ class TupleList:
             if csv_in_microseconds:
                 for idx in range(desired_ms):
                     num_of_packets = rawCSV[idx]
-                    print("num_of_packets = " + str(num_of_packets))
+                    # print("num_of_packets = " + str(num_of_packets))
                     tuple_list.append((int(num_of_packets), idx))
             else:                
                 current_row = 0  # The 0th row refers to the first row containing packet data in the csv
