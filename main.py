@@ -137,7 +137,7 @@ print("Finding average latency...\n")
 print("avg latency: " + str(find_avg_latency(proc_unit_list[num_of_proc_units-1].latency, proc_unit_list[num_of_proc_units-1].throughput)) + " μs")
 
 clock.start_stop()
-print("A " + str(desired_run_time_ms) + " second long simulation was completed in " + str(clock.elapsed) + " second(s).")
+print("A " + str(desired_run_time_ms) + " μs simulation was completed in " + str(clock.elapsed) + " second(s).")
 
 	# Calculate Statistics
 		# timer
