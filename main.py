@@ -12,42 +12,48 @@ import math # for floor, ceil functions
 from TupleList import TupleList # for TupleLists
 from Clock import Clock # for timing things
 from ProcessingUnit import ProcessingUnit # for processing units
+from ProcessingUnitFactory import ProcessingUnitFactory
 from StatCalculator import StatCalculator
 import random
 import os
+import numpy as np 
 
 # Cmd Line Args checking
 incorrectInput = False
 
 # When arguments are missing that are required it will print a test example of how to correctly input data
-if not len(sys.argv) == 5:
-	print("Correct syntax is: \"py(thon3) main.py filename processingRate(microseconds/packet) wantedBufferSize desiredRunTime(seconds)\"")
+if len(sys.argv) < 7:
+	print("Correct syntax is: \"py(thon3) main.py filename desired_runtime csv_is_in_microseconds(t/f) number_of_processing_units processing_rate_one buffer_size_one processing_rate_two....\"")
 	print("Terminating...")
 	sys.exit()
- 
+
 # If a filepath is not given it will assume there was a user input error
 if not sys.argv[1]:
 	print("File path may be incorrect")
 	incorrectInput = True
 
-# if (sys.argv[2]) != type(str):
-	# print("Please try again")
-	# IncorrectInput = True
-
-# Will not accept negative or zero inputs for Processing Rate
-if float(sys.argv[2]) <= float(0):
-	print("Processing Rate cannot be less than 0")
-	incorrectInput = True
-
-# Will not accept Buffer Size that is less than 1
-if float(sys.argv[3]) < float(1.0):
-	print("Desired Buffer Size cannot be less than 1")
-	incorrectInput = True
-
 # Will not accept Run Time that is less than 1
-if float(sys.argv[4]) < float(1.0):
-	print("Desired Run Time cannot be less than 1")
+if float(sys.argv[2]) < float(0):
+	print("Desired Run Time cannot be less than 0. Specifying a Run Time of 0 will cause the program to run until the entire CSV has been processed.")
 	incorrectInput = True
+
+if sys.argv[3] != 't' and sys.argv[3] != 'f':
+	print("Expected boolean for whether or not csv is in milliseconds. Make sure your boolean is capitalized. (e.g.): False")
+	incorrectInput = True
+
+if float(sys.argv[4]) < float(1.0):
+	print("number_of_processing_units should be a value between 1 and 10.")
+	incorrectInput = True
+
+for idx in range(int(sys.argv[4])):
+	if float(sys.argv[idx+5]) <= float(0):
+		print("Processing Rate cannot be less than 0")
+		incorrectInput = True
+
+	# Will not accept Buffer Size that is less than 1
+	if float(int(sys.argv[idx+6])) < float(1.0):
+		print("Desired Buffer Size cannot be less than 1")
+		incorrectInput = True
 
 # General shutdown message for incorrect inputs
 if incorrectInput:
@@ -56,50 +62,82 @@ if incorrectInput:
 
 # Command Line Arg Instantiation
 filename = sys.argv[1]  # First arg of command line must be filename of csv
-processingRate = float(sys.argv[2])  # Second arg of command line must be processing rate in int (milliseconds per packet)
-wantedBufferSize = int(sys.argv[3])  # Third arg of command line must be desired buffer size (just a number)
-desired_run_time = int(sys.argv[4]) # Fourth arg of command line must be desired run time (in seconds)
+desired_run_time_ms = int(sys.argv[2])  # Second arg of command line must be desired run time (in microseconds)
+if sys.argv[3] == 't':	# Third arg of command line must be a boolean of whether or not the csv is given in microsecond format
+	csv_is_microseconds = True
+else:
+	csv_is_microseconds = False
+num_of_proc_units = int(sys.argv[4])  # Fourth arg of command line must be an integer specifying the number of desired processing units
 
-# Convert processing rate from milliseconds / 1 packet to packets / 1 millisecond
-process_rate_packet_p_ms = 1000 / processingRate
+processing_unit_factory = ProcessingUnitFactory()
+proc_unit_list = processing_unit_factory.build_processing_unit_list(sys.argv, num_of_proc_units)
 
 #Instance Variables (maybe not needed since TupleList exists?)
-MILLISECONDS_PER_SECOND = 1000
-DISTRIB_MOD = 0.05
-processingUnit = ProcessingUnit(process_rate_packet_p_ms, wantedBufferSize)
 clock = Clock()
-
-# Main stuff here
-current_time = 0
 clock.start_stop()
 
-# Build out our list of tuples ( time, packets_left )
+# Build out our list of tuples in the structure: [(packets, simulated_time_index), (packets, simulated_time_index),...]
 csvArray = TupleList()
-csvArray.create(filename)
-packetLoadsToProcess = csvArray.convert_tuple_list_to_milliseconds(DISTRIB_MOD)
+packets_to_process = csvArray.create(filename, csv_is_microseconds, desired_run_time_ms)
+#print(packets_to_process)
 #print("csv shit is done")
 
-# Poor attempt at limiting the runtime bug, needs rework
-max_run_time = len(packetLoadsToProcess)
-if (desired_run_time > max_run_time):
-	desired_run_time = max_run_time
+is_program_done = False
+ms_being_simulated = 0
 
-# Convert runtime from seconds to ms
-desired_run_time_ms = desired_run_time
+
+def check_is_program_done(desired_runtime_ms, ms_being_simulated, packets_to_process, current_proc_unit):
+	program_done = True
+	if ms_being_simulated+1 < desired_run_time_ms:
+		program_done = False
+	if ms_being_simulated+1 < len(packets_to_process):
+		program_done = False
+	if current_proc_unit.get_current_buffer_size() > 0:
+		program_done = False
+	return program_done
+
 
 # Create a while loop, where each loop simulates 1 millisecond of operation
-while (current_time < desired_run_time_ms):
-	packet_load = packetLoadsToProcess[current_time]
-	processingUnit.add_to_buffer(packet_load, current_time)
-	processingUnit.process_data(current_time) # Process data for 1 millisecond
-	current_time += 1
-	#print(current_time)
+while is_program_done == False:
+	for idx in range(num_of_proc_units):
+		current_proc_unit = proc_unit_list[idx]
+		if idx == 0:
+			if ms_being_simulated < desired_run_time_ms:
+				#print("ms_being_simulated: " + str(ms_being_simulated))
+				current_proc_unit.add_packets_from_input_list(packets_to_process, ms_being_simulated)
+			# print("Current Processing Unit = " + str(idx))
+			current_proc_unit.process_data(ms_being_simulated)
+		else:
+			# print("Current Processing Unit = " + str(idx))
+			current_proc_unit.process_data(ms_being_simulated)
+
+		if idx + 1 < num_of_proc_units:
+			#print("this is happening")
+			next_proc_unit = proc_unit_list[idx+1]
+			next_proc_unit.add_packets_from_prior_proc_unit(current_proc_unit)
+
+		is_program_done = check_is_program_done(desired_run_time_ms, ms_being_simulated, packets_to_process, current_proc_unit)
+	# print("simulating: " + str(ms_being_simulated))
+	ms_being_simulated += 1
 
 #lengthOfpacketBufferAtEnd = len(processingUnit.packetBuffer) #debugging
 #print(processingUnit.packetBuffer[lengthOfpacketBufferAtEnd - 1]) #debugging
+def find_avg_latency(latency, throughput):
+	latency_list = []
+	for idx in range(len(latency)):
+		for idx_2 in range(int(throughput[idx])):
+			latency_list.append(latency[idx])
+
+	#print(latency)
+	#print(throughput)
+	#print(latency_list)
+	return np.mean(latency_list)
+
+print("Finding average latency...\n")
+print("avg latency: " + str(find_avg_latency(proc_unit_list[num_of_proc_units-1].latency, proc_unit_list[num_of_proc_units-1].throughput)) + " μs")
 
 clock.start_stop()
-print("A " + str(desired_run_time) + " second long simulation was completed in " + str(clock.elapsed) + " second(s).")
+print("A " + str(desired_run_time_ms) + " μs simulation was completed in " + str(clock.elapsed) + " second(s).")
 
 	# Calculate Statistics
 		# timer
@@ -116,8 +154,8 @@ print("A " + str(desired_run_time) + " second long simulation was completed in "
 
 	#print stats
 # print(processingUnit.currentBufferSize)
-myStats = StatCalculator(processingUnit)
-myStats.getStats()
+# myStats = StatCalculator(processingUnittwo)
+# myStats.getStats()
 
 # print("Program output for filename: '" + filename + "'.") #since TupleList doesn't store filename
 # csvArray.print_tuple_list()
@@ -127,4 +165,6 @@ myStats.getStats()
 
 # 12947080 - w/ a processing rate of 14k
 # 11331280 - w/ a processing rate of 50k
+
+
 

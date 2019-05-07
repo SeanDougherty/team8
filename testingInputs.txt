@@ -1,0 +1,25 @@
+Input Rates Testing:
+
+There are 3 CSVs, TestInputRateIncreasing, TestInputRateDecreasing, and TestInputRateConstant.
+Constant = 4 microseconds of 5,5,5,5
+Increasing = 4 microseconds of 3,4,6,7
+Decreasing = 4 microseconds of 7,6,4,3
+   
+    With single processing unit
+    py main.py .\TestInputRateIncreasing.csv 4 t 1 4 100
+    py main.py .\TestInputRateDecreasing.csv 4 t 1 4 100
+    py main.py .\TestInputRateConstant.csv 4 t 1 4 100
+
+    With multiple processing units
+    py main.py .\TestInputRateIncreasing.csv 4 t 2 2 100 2 100
+    py main.py .\TestInputRateDecreasing.csv 4 t 2 2 100 2 100
+    py main.py .\TestInputRateConstant.csv 4 t 2 2 100 2 100
+
+General Testing:
+
+    Processing unit differences (multiple units should be faster)
+    py main.py .\TestData_1.csv 300 f 1 10 100
+    py main.py .\TestData_1.csv 300 f 2 5 100 5 100
+
+    Testing actual data:
+    py main.py .\TestData_2_19_2019_security-info.csv 300 f 1 1 100
